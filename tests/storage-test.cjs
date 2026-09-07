@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');
-const api=require('./chat-storage.cjs'),core=require('./clean-subagents.cjs');
+const api=require('../src/chat-storage.cjs'),core=require('../src/clean-subagents.cjs');
 async function temp(fn){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'chat-storage-test-'));try{return await fn(dir);}finally{if(!path.resolve(dir).startsWith(path.resolve(os.tmpdir())+path.sep+'chat-storage-test-'))throw Error('Unsafe test cleanup');fs.rmSync(dir,{recursive:true,force:true});}}
 test('platform-specific storage discovery',()=>{
  const h=path.resolve('test-home');assert.equal(api.defaults('linux',h,{}).cursorUser,path.join(h,'.config','Cursor','User'));

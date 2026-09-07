@@ -13,6 +13,6 @@ Node.js 24 is recommended. No npm packages are required.
 
 Close target applications when prompted and keep them closed until finished.
 Restoring protects files that have gained new messages. Keep backups until satisfied.
-See README.md for supported formats, limitations and test scope.
+See guide.md for supported formats, limitations and test scope.
 
 Interactive controls: use Up/Down to move and Enter to select. Esc returns or declines. Destructive confirmations default to No; backups default to Keep. Selected options are highlighted in cyan. Set NO_COLOR to disable ANSI colors in the cleanup menu.

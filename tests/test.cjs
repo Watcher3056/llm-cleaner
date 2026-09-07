@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
-const {analyze,writeReduced,backup}=require('./clean-subagents.cjs');
+const {analyze,writeReduced,backup}=require('../src/clean-subagents.cjs');
 const id='11111111-1111-1111-1111-111111111111';
 const meta={type:'session_meta',payload:{id,source:{subagent:{thread_spawn:{parent_thread_id:'parent'}}}}};
 const cp=n=>({type:'compacted',payload:{replacement_history:[{type:'message',role:'user',content:[{type:'input_text',text:'state '+n}]}]}});

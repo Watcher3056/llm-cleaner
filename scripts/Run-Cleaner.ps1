@@ -72,7 +72,7 @@ try {
             Write-Host "Backups: $BackupDir"
         }
     }
-    $taskScript = Join-Path $PSScriptRoot 'chat-storage.cjs'
+    $taskScript = Join-Path (Split-Path $PSScriptRoot -Parent) 'src/chat-storage.cjs'
     $taskArgs = @()
     if ($ScanOnly) { $taskArgs += '--scan-only' }
     if ($BackupDir) { $taskArgs += @('--backup-dir', $BackupDir) }

@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');
-const api=require('./transcripts.cjs'),processes=require('./process-control.cjs');
+const api=require('../src/transcripts.cjs'),processes=require('../src/process-control.cjs');
 async function temp(fn){const root=fs.mkdtempSync(path.join(os.tmpdir(),'transcript-test-'));try{await fn(root);}finally{if(!path.resolve(root).startsWith(path.resolve(os.tmpdir())+path.sep+'transcript-test-'))throw Error('Unsafe cleanup');fs.rmSync(root,{recursive:true,force:true});}}
 const session='11111111-1111-4111-8111-111111111111';
 function claude(kind='simple'){

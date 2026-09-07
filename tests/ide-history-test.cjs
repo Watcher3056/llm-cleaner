@@ -1,6 +1,6 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto'),{DatabaseSync}=require('node:sqlite');
-const cursor=require('./cursor-history.cjs'),anti=require('./antigravity-history.cjs'),w=require('./protobuf-wire.cjs'),{Vault}=require('./backup-vault.cjs'),{edit}=require('./database-edit.cjs');
+const cursor=require('../src/cursor-history.cjs'),anti=require('../src/antigravity-history.cjs'),w=require('../src/protobuf-wire.cjs'),{Vault}=require('../src/backup-vault.cjs'),{edit}=require('../src/database-edit.cjs');
 const guard=async()=>{},id=()=>crypto.randomUUID();
 async function temp(fn){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'ide-history-test-'));try{await fn(dir);}finally{assert(path.resolve(dir).startsWith(path.resolve(os.tmpdir())+path.sep+'ide-history-test-'));fs.rmSync(dir,{recursive:true,force:true});}}
 function database(file,kv=true){fs.mkdirSync(path.dirname(file),{recursive:true});const db=new DatabaseSync(file);db.exec('CREATE TABLE ItemTable(key TEXT UNIQUE,value BLOB)');if(kv)db.exec('CREATE TABLE cursorDiskKV(key TEXT UNIQUE,value BLOB); CREATE TABLE composerHeaders(composerId TEXT PRIMARY KEY,value TEXT)');db.prepare('INSERT INTO ItemTable VALUES(?,?)').run('unrelated',Buffer.from([0,255,2]));return db;}

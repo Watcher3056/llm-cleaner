@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),{PassThrough}=require('node:stream');
-const {createUI}=require('./terminal-ui.cjs'),wizard=require('./wizard.cjs');
+const {createUI}=require('../src/terminal-ui.cjs'),wizard=require('../src/wizard.cjs');
 function terminal(){const input=new PassThrough(),output=new PassThrough();input.isTTY=output.isTTY=true;input.setRawMode=v=>{input.isRaw=v;};output.columns=80;let text='';output.on('data',b=>text+=b);return {input,output,ui:createUI(input,output),text:()=>text};}
 test('arrow selection uses visible labels, Enter accepts, raw mode is restored',async()=>{
  const t=terminal();t.ui.log('  1. First\n  2. Second\n  0. Back');const pending=wizard.choice(t.ui.ask,'Action',['0','1','2']);

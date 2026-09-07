@@ -143,13 +143,13 @@ function show(report){return require('./wizard.cjs').overview(report,console.log
 async function interactive(report,ask,backupDir,log=console.log){return require('./wizard.cjs').run(report,ask,backupDir,log,module.exports);}
 async function main(){
  const args=process.argv.slice(2),val=k=>{const i=args.indexOf(k);return i<0?undefined:args[i+1];};
- if(args.includes('--help')){console.log('node chat-storage.cjs [--scan-only] [--report PATH] [--backup-dir PATH]\n[--codex-home PATH] [--claude-home PATH] [--cursor-home PATH] [--cursor-user PATH]\n[--gemini-home PATH] [--antigravity-home PATH] [--antigravity-user PATH]\nInteractive by default: analyze -> select -> separate confirmations -> cleanup -> optional NTFS -> actual savings.\nRunning applications are detected and closure offered before mutations. Claude checkpoint pruning; Gemini journal deduplication; Cursor/Antigravity checkpoint history pruning, old-chat deletion and verified SQLite VACUUM.');return;}
+ if(args.includes('--help')){console.log('node src/chat-storage.cjs [--scan-only] [--report PATH] [--backup-dir PATH]\n[--codex-home PATH] [--claude-home PATH] [--cursor-home PATH] [--cursor-user PATH]\n[--gemini-home PATH] [--antigravity-home PATH] [--antigravity-user PATH]\nInteractive by default: analyze -> select -> separate confirmations -> cleanup -> optional NTFS -> actual savings.\nRunning applications are detected and closure offered before mutations. Claude checkpoint pruning; Gemini journal deduplication; Cursor/Antigravity checkpoint history pruning, old-chat deletion and verified SQLite VACUUM.');return;}
  const roots=defaults();for(const [key,arg] of Object.entries({codex:'--codex-home',claude:'--claude-home',cursor:'--cursor-home',cursorUser:'--cursor-user',gemini:'--gemini-home',antigravity:'--antigravity-home',antigravityUser:'--antigravity-user'}))if(val(arg))roots[key]=path.resolve(val(arg));
- const reportFile=path.resolve(val('--report')||path.join(__dirname,'storage-report.json'));
+ const reportFile=path.resolve(val('--report')||path.join(__dirname,'..','storage-report.json'));
  let backupDir=path.resolve(val('--backup-dir')||path.join(os.homedir(),'Documents','Chat-storage-backups'));
  for(const root of Object.values(roots))if(core.inside(path.resolve(root),backupDir)||path.resolve(root)===backupDir)throw Error('Backup directory must be outside application storage');
  console.log('Running applications:',processes.list().map(p=>p.app+' PID '+p.pid+(p.protected?' (cleaner ancestor)':'')).join(', ')||'none');
- const report=await scan(roots,path.join(__dirname,'preview.json'));await fsp.writeFile(reportFile,JSON.stringify(report,null,2));show(report);
+ const report=await scan(roots,path.join(__dirname,'..','preview.json'));await fsp.writeFile(reportFile,JSON.stringify(report,null,2));show(report);
  if(args.includes('--scan-only'))return;
  if(!process.stdin.isTTY)throw Error('Interactive terminal required; use --scan-only for unattended analysis.');
  const ui=require('./terminal-ui.cjs').createUI(),ask=ui.ask;
