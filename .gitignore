@@ -1,0 +1,15 @@
+# Local reports and personal chat data
+*.json
+*.jsonl
+*.vscdb*
+*.pb
+*.gz
+*.zip
+*.log
+*.tmp
+.env*
+node_modules/
+backups/
+work/
+.DS_Store
+Thumbs.db
