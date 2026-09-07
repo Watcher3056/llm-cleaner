@@ -1,38 +1,45 @@
 # LLM Cleaner
 
-Free up disk space used by **Codex, Claude Code, Cursor, Gemini CLI and Antigravity**—while preserving supported chats' saved context.
+### Your AI chats shouldn't eat your SSD.
 
-## How much space can I save?
+Long coding sessions leave behind piles of tool output, agent history and duplicate messages. **LLM Cleaner helps you reclaim that space while keeping saved context and recent conversation.**
 
-Examples from local scans and tests:
+Works with **Codex · Claude Code · Cursor · Gemini CLI · Antigravity**.
 
-- **Codex:** an 88.3 GiB chat store had **64.0 GiB (~72%)** of removable subagent history. This was a scan estimate, not a full-store cleanup.
-- **Gemini CLI:** **697.6 MiB (~85%)** of an 823.0 MiB store was removable duplicate journal data; the native loader verified unchanged conversation state.
-- **Test copies:** cleanup reclaimed **28.31 MiB across five Cursor chats** and **19.01 MiB across three Antigravity chats**, with retained context verified by their native readers.
+[**Download ZIP**](https://github.com/Watcher3056/llm-cleaner/archive/refs/heads/main.zip) · [How it works](docs/guide.md) · [Compatibility & testing](docs/validation.md)
 
-Your results will vary. Preview savings before confirming; actual savings are reported afterward. Backups take space too—prefer another drive.
+## How big is the problem?
 
-## How does it work?
+**88 GiB of Codex chats. 64 GiB identified as reclaimable.**
 
-Long chats accumulate old messages, tool output and duplicate records. Where a supported saved summary exists, the cleaner removes history already covered by it, keeping the summary, recent messages and required references. Gemini cleanup removes superseded journal entries instead.
+That's roughly **72%** of one chat store tied up in removable subagent history. Your mileage will vary—the cleaner shows your own estimate before you commit to anything. Backups use space too, so another drive is a good place to keep them.
 
-**Scan → choose an app and action → review → confirm.** Main chats and subagents are separate options. You can also delete chats inactive for **3, 6 or 12 months**, or enable **NTFS compression on Windows**.
+## Less history. Same place to pick up.
 
-## What protects my progress?
+When an app has already summarized older messages, the cleaner trims supported history while keeping the saved summaries, recent messages and required references. It can also remove duplicate journal entries and reclaim unused database space.
 
-- **Saved context stays:** supported history cleanup preserves the summaries and recent context needed to resume. Project files are untouched.
-- **Backups come first:** original files are backed up and verified before changes. At the end, choose **Keep**, **Restore** or **Delete backups**.
-- **Checks before changes:** the cleaner asks before cleanup, checks for running apps and skips unsupported histories.
+Your project files stay untouched. **Verified backups come first**, and every cleanup needs your confirmation. Finish by keeping your backups, restoring your chats or deleting the backups.
 
-Pruning removes old detail from the visible history; deleting an old chat removes that chat. Keep backups until you have reopened your chats and checked them. [See verification and compatibility limits](docs/validation.md).
+Old details disappear from the chat history after trimming. Keep your backups until you've reopened your chats and checked them. Whole-chat deletion is a separate choice.
 
-## Get started
+## You choose what goes
 
-1. [Download ZIP](https://github.com/Watcher3056/llm-cleaner/archive/refs/heads/main.zip) and extract it.
-2. Install [Node.js 24 or newer](https://nodejs.org/) if needed.
-3. **Windows:** double-click **Start-Windows.cmd**.  
+- Clean **subagents**, **main chats**, or both—with separate controls.
+- Remove chats inactive for **3, 6 or 12 months**.
+- Add **NTFS compression** on Windows for extra savings.
+- See the space reclaimed after each step.
+
+## Start cleaning
+
+1. **Download and extract** the ZIP above.
+2. Install [Node.js 24+](https://nodejs.org/) if you don't have it.
+3. **Windows:** double-click `Start-Windows.cmd`.
    **Linux / macOS:** run `sh run-cleaner.sh` in the extracted folder.
 
-Use **↑ / ↓** and **Enter**. Save your work before allowing apps to close. Windows and Linux are tested; macOS is not yet verified.
+Choose with **↑ / ↓**, confirm with **Enter**. The cleaner checks for running apps and offers to close them—save your work first.
 
-[Detailed guide](docs/guide.md) · [Test results](docs/validation.md) · [Contributing](docs/development.md)
+Windows and Linux tested. macOS not yet verified. Unsupported histories are skipped.
+
+---
+
+[Detailed guide](docs/guide.md) · [Test results](docs/validation.md) · [Development](docs/development.md)
