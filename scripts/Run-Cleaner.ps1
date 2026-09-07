@@ -36,15 +36,8 @@ function Select-CleanerOption([string]$Title, [string[]]$Options) {
 }
 
 try {
-    if (!(Get-Command node -ErrorAction SilentlyContinue)) {
-        Write-Host 'Node.js 24 or newer is required. Install it from https://nodejs.org and reopen Start-Windows.cmd.' -ForegroundColor Yellow
-        exit 1
-    }
-    $taskMajor = & node -p 'parseInt(process.versions.node)'
-    if ($LASTEXITCODE -ne 0 -or [int]$taskMajor -lt 24) {
-        Write-Host 'Node.js 24 or newer is required: https://nodejs.org. Restart this launcher after installation.' -ForegroundColor Yellow
-        exit 1
-    }
+    . (Join-Path $PSScriptRoot 'ensure-node.ps1')
+    $taskNode = Get-CleanerNode
     if (!$ScanOnly -and !$BackupDir) {
         Write-Host "`nCHAT STORAGE CLEANER" -ForegroundColor Cyan
         $taskMode = Select-CleanerOption 'Choose a mode' @('Analyze and choose cleanup options', 'Analyze only (no changes)', 'Exit')
@@ -76,7 +69,7 @@ try {
     $taskArgs = @()
     if ($ScanOnly) { $taskArgs += '--scan-only' }
     if ($BackupDir) { $taskArgs += @('--backup-dir', $BackupDir) }
-    & node $taskScript @taskArgs
+    & $taskNode $taskScript @taskArgs
     if ($LASTEXITCODE -ne 0) { throw "Cleaner stopped (exit $LASTEXITCODE). See the message above." }
 } catch {
     Write-Host $_.Exception.Message -ForegroundColor Red

@@ -32,11 +32,10 @@ Old details disappear from the chat history after trimming. Keep your backups un
 ## Start cleaning
 
 1. **Download and extract** the ZIP above.
-2. Install [Node.js 24+](https://nodejs.org/) if you don't have it.
-3. **Windows:** double-click `Start-Windows.cmd`.
+2. **Windows:** double-click `Start-Windows.cmd`.
    **Linux / macOS:** run `sh run-cleaner.sh` in the extracted folder.
 
-Choose with **↑ / ↓**, confirm with **Enter**. The cleaner checks for running apps and offers to close them—save your work first.
+If Node.js 24+ is missing or too old, the launcher offers to download and install it for you. Installation requires your approval and leaves your system Node.js unchanged.
 
 Windows and Linux tested. macOS not yet verified. Unsupported histories are skipped.
 

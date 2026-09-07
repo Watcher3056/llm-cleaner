@@ -2,7 +2,7 @@
 
 Windows: extract the archive and double-click Start-Windows.cmd.
 Linux / macOS: open a terminal in this folder and run sh run-cleaner.sh.
-Node.js 24 is recommended. No npm packages are required.
+Node.js 24+ is required; the launcher offers to install it with your approval if needed. No npm packages are required.
 
 1. Choose analysis or interactive cleanup, then a backup folder.
 2. Review the short storage table and select an application.

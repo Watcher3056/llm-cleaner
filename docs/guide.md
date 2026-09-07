@@ -8,7 +8,7 @@ Node.js **24 LTS** recommended; no npm packages. Windows and Linux/WSL tested. m
 
 ## Start
 
-**Windows: double-click `Start-Windows.cmd`.** The launcher offers analysis/cleanup mode, numbered drives with free space and a graphical backup-folder picker. No command-line arguments are needed. It checks Node.js and keeps the window open after completion/errors.
+**Windows: double-click `Start-Windows.cmd`.** The launcher offers analysis/cleanup mode, numbered drives with free space and a graphical backup-folder picker. No command-line arguments are needed. It checks Node.js, offers an approved local installation if missing or too old, and keeps the window open after completion/errors.
 
 Optional command-line usage from an external terminal:
 
@@ -118,3 +118,7 @@ The final version passed 46/46 tests on Ubuntu WSL2. Windows passed 44 tests wit
 
 Earlier Linux checks also exercised interactive restore/backup deletion and normal closure of owned disposable processes for all five application names. No real user application was terminated.
 
+
+## Automatic Node.js setup
+
+Launchers reuse a working Node.js 24+ installation. Otherwise they ask before downloading Node.js 24.20.0 from nodejs.org, verify SHA-256 against the official checksum list, and install a private runtime without administrator rights or changing system Node.js. Enter declines; unattended runs never install. Windows uses `%LOCALAPPDATA%/LLMCleaner/runtime`; Linux/macOS use `$XDG_DATA_HOME/llm-cleaner/runtime` or `~/.local/share/llm-cleaner/runtime`. Supports x64 and ARM64. Linux/macOS need curl or wget, tar, and sha256sum or shasum. Unsupported operating systems require a compatible manual installation.

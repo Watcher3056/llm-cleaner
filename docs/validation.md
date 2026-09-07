@@ -31,3 +31,7 @@ The final arrow-menu workflow was also exercised in a real Linux pseudo-terminal
 ## Scope
 
 Results establish compatibility with the inspected layouts and sampled native readers, not every past/future application version. Unknown layouts and unresolved dependencies are retained. Cursor's shared blobs/serialized agent state and Antigravity's metadata/brain artifacts remain intentionally. Savings shown above are measured on samples, not estimates for the entire user's installation.
+
+## Optional Node.js installation
+
+Windows x64 and Linux x64 smoke tests downloaded the official Node.js 24.20.0 runtime into isolated temporary folders, verified its checksum, launched the cleaner and reused the runtime without another prompt. Cancellation created no installation files. The Linux pseudo-terminal test also checked that Enter declines and redirected input cannot authorize installation. Windows supplied consent through a test replacement of the prompt function. Existing system Node.js detection was checked under Windows PowerShell 5.1. macOS and ARM64 installers have not been exercised on native hardware.
