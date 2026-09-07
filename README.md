@@ -1,4 +1,4 @@
-# Context Bonsai
+# LLM Cleaner
 
 **Trim the history. Keep the context.**
 
