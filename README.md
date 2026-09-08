@@ -18,13 +18,14 @@ That's roughly **72%** of one chat store tied up in removable subagent history. 
 
 When an app has already summarized older messages, the cleaner trims supported history while keeping the saved summaries, recent messages and required references. It can also remove duplicate journal entries and reclaim unused database space.
 
-Your project files stay untouched. **Verified backups come first**, and every cleanup needs your confirmation. Finish by keeping your backups, restoring your chats or deleting the backups.
+Your project files stay untouched. **Verified backups come first**, and the complete cleanup plan needs your confirmation. Finish by keeping your backups, restoring your chats or deleting the backups.
 
 Old details disappear from the chat history after trimming. Keep your backups until you've reopened your chats and checked them. Whole-chat deletion is a separate choice.
 
 ## You choose what goes
 
-- Clean **subagents**, **main chats**, or both—with separate controls.
+- Select several apps at once, then configure the whole cleanup in one guided flow.
+- Clean **subagents**, **main chats**, or both—with separate batch steps.
 - Remove chats inactive for **3, 6 or 12 months**.
 - Add **NTFS compression** on Windows for extra savings.
 - See the space reclaimed after each step.

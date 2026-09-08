@@ -33,4 +33,5 @@ test('database vacuum and restore include WAL state and preserve all rows',async
 test('menus default to cancel / keep and never treat Enter as approval',async()=>{
  assert.equal(await wizard.yes(async()=>'', 'Delete backups?'),false);assert.equal(await wizard.yes(async()=>'yes','Delete backups?'),true);
  const answers=['wrong','0'];assert.equal(await wizard.choice(async()=>answers.shift(),'Pick',['0','1']), '0');
+ const batches=['bad','1, 3'];assert.deepEqual(await wizard.multiChoice(async()=>batches.shift(),'Apps',[{value:'codex',label:'Codex'},{value:'claude',label:'Claude'},{value:'cursor',label:'Cursor'}]),['codex','cursor']);
 });

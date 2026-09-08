@@ -18,13 +18,21 @@ test('unknown SQLite schema is audit-only',async()=>temp(async dir=>{
  const {DatabaseSync}=require('node:sqlite'),f=path.join(dir,'state.vscdb'),d=new DatabaseSync(f);d.exec('CREATE TABLE future_messages(x)');d.close();assert.equal(api.inspectDb(f).supported,false);
 }));
 test('interactive cancellation never calls cleanup or compression',async()=>{
- const apps=['codex','claude','cursor'].map(id=>({id,label:id,estimatedSavings:100,files:[]}));let asked=0;
- const results=await api.interactive({apps},async()=>{asked++;return '';},path.resolve('unused'),()=>{});assert.deepEqual(results,[]);assert.equal(asked,1);
+ const apps=['codex','claude','cursor'].map(id=>({id,label:id,estimatedSavings:100,files:[__filename]}));let asked=0;
+ const results=await api.interactive({apps},async()=>{asked++;return '0';},path.resolve('unused'),()=>{});assert.deepEqual(results,[]);assert.equal(asked,1);
 });
-test('cleanup confirmation is separate from selecting an app',async()=>{
- const apps=['codex','claude','cursor'].map(id=>({id,label:id,estimatedSavings:100,files:[]}));const answers=['1','NO',''];
- const results=await api.interactive({apps},async()=>answers.shift()||'',path.resolve('unused'),()=>{});assert.deepEqual(results,[]);
-});
+test('batch flow previews the complete plan before one cleanup confirmation',async()=>temp(async dir=>{
+ const root=path.join(dir,'codex'),sessions=path.join(root,'sessions'),id=require('node:crypto').randomUUID(),file=path.join(sessions,id+'.jsonl');fs.mkdirSync(sessions,{recursive:true});
+ fs.writeFileSync(file,[{type:'session_meta',payload:{id,source:{subagent:{thread_spawn:{parent_thread_id:'parent'}}}}},{type:'response_item',payload:{type:'message',role:'user',content:[{type:'input_text',text:'old'.repeat(20000)}]}},{type:'compacted',payload:{replacement_history:[{type:'message',role:'user',content:[{type:'input_text',text:'saved context'}]}]}}].map(JSON.stringify).join('\n')+'\n');
+ const plan=await core.analyze(file),apps=[{id:'codex',label:'Codex',mode:'prune-subagents',estimatedSavings:plan.saving,logicalBytes:fs.statSync(file).size,files:[file],plans:[plan]}],answers=['','','0','0','no',...(process.platform==='win32'?['0']:[])],logs=[];
+ const results=await api.interactive({apps,roots:{codex:root}},async()=>answers.shift(),path.join(dir,'backups'),x=>logs.push(x));assert.deepEqual(results,[]);assert.equal(answers.length,0);assert(logs.some(x=>x.includes('CLEANUP PLAN')));assert(logs.some(x=>x.includes('Estimated total')));assert.equal((await core.analyze(file)).status,'candidate');
+}));
+test('one batch applies cleanup to multiple applications',async()=>temp(async dir=>{
+ const codexRoot=path.join(dir,'codex'),sessions=path.join(codexRoot,'sessions'),id=require('node:crypto').randomUUID(),codexFile=path.join(sessions,id+'.jsonl');fs.mkdirSync(sessions,{recursive:true});fs.writeFileSync(codexFile,[{type:'session_meta',payload:{id,source:{subagent:{thread_spawn:{parent_thread_id:'parent'}}}}},{type:'response_item',payload:{type:'message',role:'user',content:[{type:'input_text',text:'old'.repeat(20000)}]}},{type:'compacted',payload:{replacement_history:[{type:'message',role:'user',content:[{type:'input_text',text:'saved context'}]}]}}].map(JSON.stringify).join('\n')+'\n');
+ const geminiRoot=path.join(dir,'gemini'),chats=path.join(geminiRoot,'tmp','x','chats'),geminiFile=path.join(chats,'session.jsonl');fs.mkdirSync(chats,{recursive:true});fs.writeFileSync(geminiFile,[{sessionId:'session',projectHash:'p'},{id:'m',type:'user',content:'first'},{id:'m',type:'user',content:'old'.repeat(20000)},{id:'m',type:'user',content:'latest'}].map(JSON.stringify).join('\n')+'\n');
+ const codexPlan=await core.analyze(codexFile),geminiPlan=await require('../src/transcripts.cjs').geminiPlan(geminiFile),apps=[{id:'codex',label:'Codex',mode:'prune-subagents',logicalBytes:fs.statSync(codexFile).size,files:[codexFile],plans:[codexPlan]},{id:'gemini',label:'Gemini CLI',mode:'journal-deduplication',logicalBytes:fs.statSync(geminiFile).size,files:[geminiFile],plans:[geminiPlan]}],answers=['','','0','0','yes',...(process.platform==='win32'?['0']:[]),'1'],logs=[],processes=require('../src/process-control.cjs'),original={ensureStopped:processes.ensureStopped,makeGuard:processes.makeGuard,stopWatcher:processes.stopWatcher};
+ processes.ensureStopped=async()=>true;processes.makeGuard=()=>async()=>{};processes.stopWatcher=()=>{};try{const results=await api.interactive({apps,roots:{codex:codexRoot,gemini:geminiRoot}},async()=>answers.shift(),path.join(dir,'backups'),x=>logs.push(x));assert.equal(results.length,2);assert(results.every(x=>x.logicalSaved>0));assert.equal(answers.length,0);assert.equal(logs.filter(x=>x.includes('CLEANUP PLAN')).length,1);assert(fs.statSync(codexFile).size<apps[0].logicalBytes);assert(fs.statSync(geminiFile).size<apps[1].logicalBytes);}finally{Object.assign(processes,original);}
+}));
 test('actual allocation measurement and native NTFS round-trip',async()=>temp(async dir=>{
  const file=path.join(dir,'repeated.txt');fs.writeFileSync(file,'verified content\n'.repeat(40000));
  const second=path.join(dir,'second.txt');fs.writeFileSync(second,'second');

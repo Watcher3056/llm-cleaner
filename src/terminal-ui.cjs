@@ -31,6 +31,31 @@ function createUI(input=process.stdin,output=process.stdout){
   };
   readline.emitKeypressEvents(input);input.setRawMode(true);input.resume();input.on('keypress',key);output.on('resize',draw);output.write('\x1b[?25l');draw();
  });
+ if(interactive)ask.multiSelect=(question,values,defaults=[],explicit)=>new Promise((resolve,reject)=>{
+  const options=values.map(value=>({value,label:safe(explicit?.[value]||value)})),chosen=new Set(defaults.filter(x=>values.includes(x)));
+  let selected=0,rows=0,wasRaw=!!input.isRaw;
+  const width=()=>Math.max(8,(output.columns||80)-2);
+  const draw=()=>{if(rows)output.write(`\x1b[${rows}A\r\x1b[J`);const lines=[safe(question).slice(0,width()),'Up/Down: move | Space: toggle | A: all | Enter: continue | Esc: none'];
+   for(let i=0;i<options.length;i++)lines.push(`${i===selected?'> ':'  '}[${chosen.has(options[i].value)?'x':' '}] ${options[i].label}`);
+   output.write(lines.map((line,i)=>paint(line.slice(0,width()),i===selected+2?'1;36':i===1?'2':'0')).join('\n')+'\n');rows=lines.length;
+  };
+  const cleanup=()=>{input.removeListener('keypress',key);output.removeListener('resize',draw);input.setRawMode(wasRaw);input.pause();output.write('\x1b[?25h');};
+  const finish=value=>{cleanup();output.write(paint(`Selected: ${value.length}/${options.length}`,'2')+'\n\n');resolve(value);};
+  const toggle=i=>{const value=options[i].value;if(chosen.has(value))chosen.delete(value);else chosen.add(value);};
+  const key=(text,event={})=>{if(event.ctrl&&event.name==='c'){cleanup();reject(Error('Cancelled by user. Backups are retained.'));return;}
+   if(event.name==='up')selected=(selected+options.length-1)%options.length;
+   else if(event.name==='down'||event.name==='tab')selected=(selected+1)%options.length;
+   else if(event.name==='home')selected=0;else if(event.name==='end')selected=options.length-1;
+   else if(event.name==='space')toggle(selected);
+   else if(event.name==='a'){if(chosen.size===options.length)chosen.clear();else for(const x of options)chosen.add(x.value);}
+   else if(event.name==='return')return finish(values.filter(x=>chosen.has(x)));
+   else if(event.name==='escape')return finish([]);
+   else if(/^[1-9]$/.test(text)&&+text<=options.length){selected=+text-1;toggle(selected);}else return;
+   draw();
+  };
+  if(!options.length)return finish([]);
+  readline.emitKeypressEvents(input);input.setRawMode(true);input.resume();input.on('keypress',key);output.on('resize',draw);output.write('\x1b[?25l');draw();
+ });
  return {ask,log};
 }
 module.exports={createUI};

@@ -34,9 +34,9 @@ The default backup location is `~/Documents/Chat-storage-backups`. **Prefer anot
 ## Workflow
 
 1. Analyze all five systems; show logical chat-storage size, stored bytes where available, and estimated cleanup savings. Cursor/Antigravity overview estimates refer to SQLite vacuum; history and age-deletion estimates are calculated when those separate actions are selected.
-2. Select one application, then one action. Main-chat compaction is a separate opt-in; age-based deletion offers 3, 6 or 12 months since last activity. Each mutation requires confirmation.
+2. Select several applications at once. The wizard then asks which selected apps should receive subagent cleanup, main-chat cleanup, age-based deletion and database-space reclamation. Main-chat cleanup and old-chat deletion remain opt-in.
 3. Make and verify gzip backups before replacements. Report actual logical/stored savings, percentages, backup space and errors.
-4. Windows only: offer NTFS compression independently, even for a system with no cleanup. Select systems, then separately confirm compression with a yes/no question.
+4. Windows only: offer NTFS compression as one batch step after cleanup. Select several systems, then separately confirm compression.
 5. Measure compression savings after the action, report additional bytes/percentage, and save stage results in `storage-report.json`.
 6. Finish: keep backups (default), restore this run, or permanently delete its backups. Restore and deletion each require confirmation. Final totals include remaining backup space.
 
@@ -103,7 +103,7 @@ All five applications offer deletion by last activity: more than 3 months, 6 mon
 
 Independent transcript work runs with two workers. Database operations remain sequential. Windows process checks reuse one PowerShell process while still checking before mutations. Progress displays completed files and reclaimed bytes. There is no verified whole-dataset speedup estimate.
 
-The final version passed 46/46 tests on Ubuntu WSL2. Windows passed 44 tests with zero failures; two mutation tests were skipped because the respective user applications were running. Native Linux Cursor loaded five real chats before and after pruning with identical loaded message/summary maps and no corrupted checkpoints. Native Antigravity loaded and exported three pruned real trajectories, with every retained step identical. See validation.md for versions, measured savings and test limits.
+The batch-flow version passed 49/49 tests on Ubuntu WSL2. Windows passed 47 tests with zero failures; two mutation tests were skipped because the respective user applications were running. Native Linux Cursor loaded five real chats before and after pruning with identical loaded message/summary maps and no corrupted checkpoints. Native Antigravity loaded and exported three pruned real trajectories, with every retained step identical. See validation.md for versions, measured savings and test limits.
 
 ## Sources
 

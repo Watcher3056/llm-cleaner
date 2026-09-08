@@ -1,12 +1,12 @@
-# Validation — 2026-09-07
+# Validation — 2026-09-08
 
 Tests use disposable copies. Real Windows chat storage was not cleaned or altered.
 
 ## Final automated suite
 
-- Ubuntu WSL2, native Linux filesystem, Node.js 24.12: 46 passed, zero failures or skips.
-- Windows: 44 passed, zero failures, two skipped because target user applications were running.
-- Covers summaries/tails, dependency protection, unknown formats, main/subagent selection, age deletion, catalogue updates, exported transcripts, nonempty SQLite WAL, exact backup restoration, changed-file refusal, arrow menus, default cancellation and process closure.
+- Ubuntu WSL2, native Linux filesystem, Node.js 24.12: 49 passed, zero failures or skips.
+- Windows: 47 passed, zero failures, two skipped because target user applications were running.
+- Covers summaries/tails, dependency protection, unknown formats, batch selection, one combined preview/confirmation, multi-application cleanup, age deletion, catalogue updates, exported transcripts, nonempty SQLite WAL, exact backup restoration, changed-file refusal, arrow menus, default cancellation and process closure.
 
 ## Cursor
 

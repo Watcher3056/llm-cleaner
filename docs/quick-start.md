@@ -5,10 +5,10 @@ Linux / macOS: open a terminal in this folder and run sh run-cleaner.sh.
 Node.js 24+ is required; the launcher offers to install it with your approval if needed. No npm packages are required.
 
 1. Choose analysis or interactive cleanup, then a backup folder.
-2. Review the short storage table and select an application.
-3. Select an action. Main-chat compaction and old-chat deletion are separate options.
-4. Review the estimate and confirm. Enter always declines destructive confirmation.
-5. On Windows, optionally choose NTFS compression in the application menu.
+2. Review the storage table and select all applications you want to clean.
+3. Walk through batch steps for subagents, main chats, old chats and database space.
+4. Review one combined estimate and confirm the complete plan.
+5. On Windows, optionally select several applications for NTFS compression.
 6. Choose Finish, then keep backups, restore this run, or delete its backups.
 
 Close target applications when prompted and keep them closed until finished.
