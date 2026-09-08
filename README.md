@@ -1,4 +1,6 @@
 # LLM Cleaner
+<img width="1672" height="941" alt="image" src="https://github.com/user-attachments/assets/039b0a8a-d3e8-4791-b194-68ca6e560aee" />
+
 
 ### Your AI chats shouldn't eat your SSD.
 
